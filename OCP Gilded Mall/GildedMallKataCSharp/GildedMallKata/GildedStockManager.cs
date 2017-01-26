@@ -9,7 +9,7 @@ namespace GildMallKata
 
     public class GildedStockManager
     {
-        public List<StockItem> StockList { get; private set; }
+        public List<StockItem> StockList { get; } = new List<StockItem>();
     }
 
     public class StockItem

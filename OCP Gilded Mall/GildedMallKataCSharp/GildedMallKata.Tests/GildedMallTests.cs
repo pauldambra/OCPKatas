@@ -17,7 +17,7 @@ namespace ClassLibrary1
         [SetUp]
         public void SetUp()
         {
-            shop = new GildedStockManager ();
+            shop = GildedStockManagerFactory.Create();
         }
 
         [Test]
