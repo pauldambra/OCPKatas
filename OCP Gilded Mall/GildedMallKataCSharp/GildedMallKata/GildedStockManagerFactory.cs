@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using GildedMallKata.AddStock;
 using GildedMallKata.CheckStock;
+using GildedMallKata.Stock;
 
 namespace GildMallKata
 {
@@ -9,9 +10,13 @@ namespace GildMallKata
     {
         private readonly GildedStockManager _shop = new GildedStockManager();
 
-        public GildedTinCanStockManagerFactory WithStock(List<StockItem> stockItems, DateTime stockAdded)
+        public GildedTinCanStockManagerFactory WithStock(List<TinnedFood> stockItems)
         {
-            stockItems.ForEach(si => new AddDatedStockHandler(_shop, stockAdded).Handle(new AddStock(si)));
+            var addTinnedFoodHandler = new AddStockHandler(_shop);
+            stockItems.ForEach(si =>
+            {
+                addTinnedFoodHandler.Handle(new AddStock(si));
+            });
             return this;
         }
 
@@ -25,9 +30,9 @@ namespace GildMallKata
     {
         private readonly GildedStockManager _shop = new GildedStockManager();
 
-        public GildedDressStockManagerFactory WithStock(List<StockItem> stockItems, DateTime stockAdded)
+        public GildedDressStockManagerFactory WithStock(List<Dress> stockItems)
         {
-            stockItems.ForEach(si => new AddDatedStockHandler(_shop, stockAdded).Handle(new AddStock(si)));
+            stockItems.ForEach(si => new AddStockHandler(_shop).Handle(new AddStock(si)));
             return this;
         }
 
@@ -37,7 +42,7 @@ namespace GildMallKata
         }
     }
 
-    public class GildedStockManagerFactory
+    public static class GildedStockManagerFactory
     {
       public static GildedStockManager Create()
         {

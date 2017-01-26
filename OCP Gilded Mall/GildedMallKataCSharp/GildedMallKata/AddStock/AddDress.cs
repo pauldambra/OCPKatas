@@ -3,11 +3,11 @@ using GildMallKata;
 
 namespace GildedMallKata.AddStock
 {
-    public class AddStock : Command
+    public class AddDress : Command
     {
-        public StockItem StockItem { get; }
+        public Dress StockItem { get; }
 
-        public AddStock(StockItem stockItem)
+        public AddDress(Dress stockItem)
         {
             StockItem = stockItem;
         }
