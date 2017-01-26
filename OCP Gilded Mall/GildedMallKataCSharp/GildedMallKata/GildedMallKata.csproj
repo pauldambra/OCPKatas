@@ -47,6 +47,7 @@
     <Compile Include="AddStock\AddStockHandler.cs" />
     <Compile Include="CheckStock\CheckStockAsAtDate.cs" />
     <Compile Include="CheckStock\StockCheckHandler.cs" />
+    <Compile Include="CheckStock\StockExpiryHandler.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="IHandle.cs" />
     <Compile Include="Program.cs" />
