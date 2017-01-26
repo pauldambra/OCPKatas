@@ -12,6 +12,25 @@ namespace GildMallKata
         public List<StockItem> StockList { get; } = new List<StockItem>();
     }
 
+    public class DatedStockItem : StockItem
+    {
+        public DateTime DateAdded { get; }
+
+        public DatedStockItem(DateTime dateAdded)
+        {
+            DateAdded = dateAdded;
+        }
+
+        public static DatedStockItem For(StockItem stockItem, DateTime stockAdded)
+        {
+            return new DatedStockItem(stockAdded)
+            {
+                Name =  stockItem.Name,
+                Price = stockItem.Price
+            };
+        }
+    }
+
     public class StockItem
     {
         public string Name { get; set; }

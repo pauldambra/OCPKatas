@@ -1,30 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using FluentAssertions;
 using GildMallKata;
 using NUnit.Framework;
-using TestBase.Shoulds;
 
-namespace ClassLibrary1
+namespace GildedMallKata.Tests
 {
     [TestFixture]
     public class GildedMallTests
     {
-        GildedStockManager shop;
-
-        [SetUp]
-        public void SetUp()
-        {
-            shop = GildedStockManagerFactory.Create();
-        }
-
         [Test]
         public void AllTenantsWantToRecordItemNameAndPrice()
         {
-            shop.StockList.ShouldAllSatisfy (i => i.Name, Is.Not.Null );
-            shop.StockList.ShouldAllSatisfy (i => i.Price, Is.Not.Null );
+            var stockItems = new List<StockItem> {new StockItem {Name="A", Price = 10}};
+            var shop = GildedStockManagerFactory.WithStock(stockItems);
+            shop.StockList.Single().Name.Should().Be("A");
+        }
+
+        [Test]
+        public void TheGildedDressDecreasesPriceAfterTenWeeks()
+        {
+            var stockItems = new List<StockItem> {new StockItem {Name="A", Price = 10}};
+            var stockAdded = DateTime.Now.AddDays(-100);
+            var tenWeekslater = stockAdded.AddDays(70);
+            var stockAfterTenWeeks = GildedStockManagerFactory.GildedDress()
+                                                .WithStock(stockItems, stockAdded)
+                                                .GetStockList(tenWeekslater);
+            stockAfterTenWeeks.Single().Name.Should().Be("A");
+            stockAfterTenWeeks.Single().Price.Should().Be(10 * 0.75M);
         }
     }
 }
