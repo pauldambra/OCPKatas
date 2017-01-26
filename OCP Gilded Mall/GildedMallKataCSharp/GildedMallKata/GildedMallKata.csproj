@@ -54,6 +54,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GildedStockManagerFactory.cs" />
     <Compile Include="GildedStockManager.cs" />
+    <Compile Include="Reports\FinancialReport.cs" />
+    <Compile Include="Reports\GenerateFinancialReport.cs" />
+    <Compile Include="Reports\GenerateFinancialReportHandler.cs" />
     <Compile Include="Stock\DatedStockItem.cs" />
     <Compile Include="Stock\Dress.cs" />
     <Compile Include="Stock\StockItem.cs" />

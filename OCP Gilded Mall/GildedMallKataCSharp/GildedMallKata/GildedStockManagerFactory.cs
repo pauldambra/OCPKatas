@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using GildedMallKata.AddStock;
 using GildedMallKata.CheckStock;
+using GildedMallKata.Reports;
 using GildedMallKata.Stock;
 
 namespace GildMallKata
@@ -24,6 +25,11 @@ namespace GildMallKata
         {
             return new StockExpiryHandler(_shop).Handle(new CheckStockAsAtDate(stockCheckDate));
         }
+
+        public FinancialReport FinancialReportAsAt(DateTime reportDate)
+        {
+            return new GenerateTinCanFinancialReportHandler(this).Handle(new GenerateFinancialReport(reportDate));
+        }
     }
 
     public class GildedDressStockManagerFactory
@@ -39,6 +45,11 @@ namespace GildMallKata
         public IEnumerable<StockItem> GetStockList(DateTime stockCheckDate)
         {
             return new StockCheckHandler(_shop).Handle(new CheckStockAsAtDate(stockCheckDate));
+        }
+
+        public FinancialReport FinancialReportAsAt(DateTime reportDate)
+        {
+            return new GenerateDressFinancialReportHandler(this).Handle(new GenerateFinancialReport(reportDate));
         }
     }
 
