@@ -4,9 +4,9 @@ namespace GildedMallKata.Stock
 {
     public class DatedStockItem : StockItem
     {
-        public DateTime DateAdded { get; }
+        protected DateTime DateAdded { get; }
 
-        public DatedStockItem(DateTime dateAdded)
+        protected DatedStockItem(DateTime dateAdded)
         {
             DateAdded = dateAdded;
         }

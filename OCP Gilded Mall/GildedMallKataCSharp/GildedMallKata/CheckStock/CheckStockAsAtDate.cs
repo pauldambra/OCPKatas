@@ -1,8 +1,9 @@
 using System;
+using GildMallKata;
 
 namespace GildedMallKata.CheckStock
 {
-    public class CheckStockAsAtDate
+    public class CheckStockAsAtDate : Command
     {
         public DateTime StockCheckDate { get; }
 

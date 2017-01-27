@@ -1,8 +1,9 @@
 using System;
+using GildMallKata;
 
 namespace GildedMallKata.Reports
 {
-    public class GenerateFinancialReport
+    public class GenerateFinancialReport : Command
     {
         public DateTime ReportDate { get; }
 
