@@ -19,7 +19,7 @@ namespace GildMallKata
         public static GildedStockManager WithStock(List<StockItem> stockItems)
         {
             var shop = new GildedStockManager();
-            stockItems.ForEach(si => new AddStockHandler(shop).Handle(new AddStock(si)));
+            stockItems.ForEach(si => new AddStockHandler(null, null).Handle(new AddStock(si)));
             return shop;
         }
     }

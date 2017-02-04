@@ -1,7 +1,9 @@
+using System.Threading.Tasks;
+
 namespace GildMallKata
 {
-    public interface IHandle<in TCommand, out TResult> where TCommand : Command
+    public interface IHandle<in TCommand> where TCommand : Command
     {
-        TResult Handle(TCommand command);
+        Task Handle(TCommand command);
     }
 }

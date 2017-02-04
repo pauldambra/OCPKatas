@@ -1,4 +1,5 @@
-﻿using GildedMallKata.Stock;
+﻿using System;
+using GildedMallKata.Stock;
 using GildMallKata;
 
 namespace GildedMallKata.AddStock
@@ -9,6 +10,18 @@ namespace GildedMallKata.AddStock
 
         public AddStock(StockItem stockItem)
         {
+            StockItem = stockItem;
+        }
+    }
+
+    public class StockAdded : Event
+    {
+        public DateTime DateAdded { get; }
+        public StockItem StockItem { get; }
+
+        public StockAdded(DateTime dateAdded, StockItem stockItem)
+        {
+            DateAdded = dateAdded;
             StockItem = stockItem;
         }
     }

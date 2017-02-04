@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using GildedMallKata.Stock;
 using GildMallKata;
 
 namespace GildedMallKata.CheckStock
 {
-    public class StockExpiryHandler : IHandle<CheckStockAsAtDate, IEnumerable<TinnedFood>>
+    public class StockExpiryHandler : IHandle<CheckStockAsAtDate>
     {
         private readonly GildedStockManager _shop;
 
@@ -14,11 +16,12 @@ namespace GildedMallKata.CheckStock
             _shop = shop;
         }
 
-        public IEnumerable<TinnedFood> Handle(CheckStockAsAtDate checkStock)
+        public Task Handle(CheckStockAsAtDate checkStock)
         {
-            return _shop.StockList
-                .OfType<TinnedFood>()
-                .Where(dsi => dsi.IsSaleable(checkStock.StockCheckDate));
+//            return _shop.StockList
+//                .OfType<TinnedFood>()
+//                .Where(dsi => dsi.IsSaleable(checkStock.StockCheckDate));
+            return Task.FromResult(0);
         }
     }
 }

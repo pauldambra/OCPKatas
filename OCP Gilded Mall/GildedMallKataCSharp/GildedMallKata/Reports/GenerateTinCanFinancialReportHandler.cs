@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using GildMallKata;
 
 namespace GildedMallKata.Reports
 {
-    public class GenerateTinCanFinancialReportHandler : IHandle<GenerateFinancialReport, FinancialReport>
+    public class GenerateTinCanFinancialReportHandler : IHandle<GenerateFinancialReport>
     {
         private readonly GildedTinCanStockManagerFactory _gildedTinCanStockManagerFactory;
 
@@ -13,7 +14,7 @@ namespace GildedMallKata.Reports
             _gildedTinCanStockManagerFactory = gildedTinCanStockManagerFactory;
         }
 
-        public FinancialReport Handle(GenerateFinancialReport command)
+        public Task Handle(GenerateFinancialReport command)
         {
             var startOfPeriod = command.ReportDate.AddMonths(-1).AddTicks(-1);
             var beforeReportingPeriod = _gildedTinCanStockManagerFactory.GetStockList(startOfPeriod);
@@ -24,7 +25,8 @@ namespace GildedMallKata.Reports
 
             var costOfDepreciation = Math.Abs(Math.Min(valueOfStock - valueOfStockAtStartOfPeriod, 0));
 
-            return new FinancialReport(valueOfStock, costOfDepreciation);
+//            return new FinancialReport(valueOfStock, costOfDepreciation);
+            return null;
         }
     }
 }

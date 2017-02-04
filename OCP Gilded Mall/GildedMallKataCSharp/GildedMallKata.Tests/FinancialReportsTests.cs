@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using FluentAssertions;
 using GildedMallKata.Stock;
 using GildMallKata;
@@ -11,22 +12,23 @@ namespace GildedMallKata.Tests
     public class FinancialReportsTests
     {
         [Test]
-        public void GildedDressCanGenerateZeroDepreciation()
+        public async Task GildedDressCanGenerateZeroDepreciation()
         {
             var stockAdded = DateTime.Now.AddDays(-1);
             var stockItems = new List<Dress> {new Dress(stockAdded) {Name="A", Price = 10}};
 
-            var financialReport = GildedStockManagerFactory
+            var shop = await GildedStockManagerFactory
                 .GildedDress()
-                .WithStock(stockItems)
-                .FinancialReportAsAt(DateTime.Now);
+                .WithStock(stockItems);
+
+             var financialReport = await shop.FinancialReportAsAt(DateTime.Now);
 
             financialReport.ValueOfStock.Should().Be(10);
             financialReport.Depreciation.Should().Be(0);
         }
 
         [Test]
-        public void GildedDressCanGenerateCorrectDepreciation()
+        public async Task GildedDressCanGenerateCorrectDepreciation()
         {
             var thisMonth = DateTime.Now.AddDays(-1);
             var addedThisMonth = new Dress(thisMonth) {Name="A", Price = 10};
@@ -36,10 +38,11 @@ namespace GildedMallKata.Tests
 
             var stockItems = new List<Dress> {addedThisMonth, priceReducesThisMonth};
 
-            var financialReport = GildedStockManagerFactory
+            var shop = await GildedStockManagerFactory
                 .GildedDress()
-                .WithStock(stockItems)
-                .FinancialReportAsAt(DateTime.Now);
+                .WithStock(stockItems);
+
+            var financialReport = await shop.FinancialReportAsAt(DateTime.Now);
 
             financialReport.ValueOfStock.Should().Be(17.5M);
             financialReport.Depreciation.Should().Be(2.5M);

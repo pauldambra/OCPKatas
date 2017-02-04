@@ -13,6 +13,15 @@ namespace GildedMallKata.Stock
         {
         }
 
+        public static Dress FromStockItem(DateTime dateAdded, StockItem stockItem)
+        {
+            return new Dress(dateAdded)
+            {
+                Name = stockItem.Name,
+                Price = stockItem.Price
+            };
+        }
+
         public Dress AsAtDate(DateTime stockCheckDate)
         {
             return new Dress(DateAdded)

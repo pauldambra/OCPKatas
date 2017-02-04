@@ -12,6 +12,7 @@
     <FileAlignment>512</FileAlignment>
     <ProductVersion>12.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,6 +34,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EventStore.ClientAPI, Version=3.9.4.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\EventStore.Client.3.9.4\lib\net40\EventStore.ClientAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -47,10 +54,13 @@
     <Compile Include="CheckStock\CheckStockAsAtDate.cs" />
     <Compile Include="CheckStock\StockCheckHandler.cs" />
     <Compile Include="CheckStock\StockExpiryHandler.cs" />
+    <Compile Include="CheckStock\StockListGenerated.cs" />
     <Compile Include="Command.cs" />
+    <Compile Include="Event.cs" />
     <Compile Include="GildedDressStockManagerFactory.cs" />
     <Compile Include="GildedTinCanStockManagerFactory.cs" />
     <Compile Include="IHandle.cs" />
+    <Compile Include="Message.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GildedStockManagerFactory.cs" />
@@ -63,6 +73,9 @@
     <Compile Include="Stock\Dress.cs" />
     <Compile Include="Stock\StockItem.cs" />
     <Compile Include="Stock\TinnedFood.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

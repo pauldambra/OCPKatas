@@ -13,7 +13,7 @@ namespace GildMallKata
 
         public GildedTinCanStockManagerFactory WithStock(List<TinnedFood> stockItems)
         {
-            var addTinnedFoodHandler = new AddStockHandler(_shop);
+            var addTinnedFoodHandler = new AddStockHandler(null, null);
             stockItems.ForEach(si =>
             {
                 addTinnedFoodHandler.Handle(new AddStock(si));
@@ -23,12 +23,15 @@ namespace GildMallKata
 
         public IEnumerable<StockItem> GetStockList(DateTime stockCheckDate)
         {
-            return new StockExpiryHandler(_shop).Handle(new CheckStockAsAtDate(stockCheckDate));
+//            return new StockExpiryHandler(_shop).Handle(new CheckStockAsAtDate(stockCheckDate));
+            return null;
         }
+
 
         public FinancialReport FinancialReportAsAt(DateTime reportDate)
         {
-            return new GenerateTinCanFinancialReportHandler(this).Handle(new GenerateFinancialReport(reportDate));
+//            return new GenerateTinCanFinancialReportHandler(this).Handle(new GenerateFinancialReport(reportDate));
+            return null;
         }
     }
 }

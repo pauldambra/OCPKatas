@@ -1,6 +1,6 @@
 namespace GildMallKata
 {
-    public class Command : Message
+    public class Message
     {
     }
 }
