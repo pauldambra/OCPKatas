@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using EventStore.ClientAPI;
-using GildedMallKata.AddStock;
 using GildedMallKata.Stock;
 using GildMallKata;
-using Newtonsoft.Json;
 
 namespace GildedMallKata.CheckStock
 {
@@ -28,7 +23,7 @@ namespace GildedMallKata.CheckStock
 
             var tins = streamEvents.FindAddedStock(TinnedFood.FromStockItem);
 
-            var nonExpiredStock = tins.Where(dsi => dsi.IsSaleable(generateStockList.StockCheckDate));
+            var nonExpiredStock = TinnedFood.ExpireItems(tins, generateStockList.StockCheckDate);
 
             await _eventStoreConnection.WriteStockListGenerated(_streamName, nonExpiredStock, generateStockList.CorrelationId);
         }

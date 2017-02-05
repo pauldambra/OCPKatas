@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace GildedMallKata.Stock
 {
@@ -13,18 +15,17 @@ namespace GildedMallKata.Stock
         {
         }
 
-        public bool IsSaleable(DateTime stockCheckDate)
-        {
-            return _lessThanAYearOld(stockCheckDate, DateAdded);
-        }
+        private bool IsSaleable(DateTime stockCheckDate)
+            => _lessThanAYearOld(stockCheckDate, DateAdded);
 
         public static TinnedFood FromStockItem(DateTime dateAdded, StockItem stockItem)
-        {
-            return new TinnedFood(dateAdded)
+            => new TinnedFood(dateAdded)
             {
                 Name = stockItem.Name,
                 Price = stockItem.Price
             };
-        }
+
+        public static IEnumerable<TinnedFood> ExpireItems(IEnumerable<TinnedFood> tins, DateTime stockCheckDate)
+            => tins.Where(t => t.IsSaleable(stockCheckDate));
     }
 }

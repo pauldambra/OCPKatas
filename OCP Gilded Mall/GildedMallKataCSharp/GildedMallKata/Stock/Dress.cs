@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace GildedMallKata.Stock
 {
@@ -13,24 +15,28 @@ namespace GildedMallKata.Stock
         {
         }
 
-        public static Dress FromStockItem(DateTime dateAdded, StockItem stockItem)
-        {
-            return new Dress(dateAdded)
-            {
-                Name = stockItem.Name,
-                Price = stockItem.Price
-            };
-        }
-
         public Dress AsAtDate(DateTime stockCheckDate)
-        {
-            return new Dress(DateAdded)
+            => new Dress(DateAdded)
             {
                 Name = Name,
                 Price = _addedTenWeeksAgo(stockCheckDate, DateAdded)
                     ? Price * 0.75M
                     : Price
             };
-        }
+
+        public static Dress FromStockItem(
+            DateTime dateAdded,
+            StockItem stockItem)
+                => new Dress(dateAdded)
+                {
+                    Name = stockItem.Name,
+                    Price = stockItem.Price
+                };
+
+        public static IEnumerable<Dress> DepreciateItems(
+            IEnumerable<Dress> dresses,
+            DateTime stockCheckDate)
+                 => dresses.Select(dsi => dsi.AsAtDate(stockCheckDate));
+
     }
 }
