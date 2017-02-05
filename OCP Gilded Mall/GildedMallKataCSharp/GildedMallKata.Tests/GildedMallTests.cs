@@ -20,46 +20,16 @@ namespace GildedMallKata.Tests
         [Test]
         public async Task TheGildedDressDecreasesPriceAfterTenWeeks()
         {
-            var stockAdded = DateTime.Now.AddDays(-100);
-            var stockItems = new List<Dress> {new Dress(stockAdded) {Name="A", Price = 10}};
+            var dayStockAdded = DateTime.Now.AddDays(-100);
+            var stockItems = new List<Dress> {new Dress(dayStockAdded) {Name="A", Price = 10}};
 
-            var tenWeekslater = stockAdded.AddDays(70);
             var shop = await GildedStockManagerFactory
                                                 .GildedDress()
                                                 .WithStock(stockItems);
 
-            //first we subscribe
-            var connection = EventStoreConnection.Create(new IPEndPoint(IPAddress.Loopback, 1113));
-            await connection.ConnectAsync();
-
-            var receivedList = new TaskCompletionSource<IEnumerable<StockItem>>();
-
             var correlationId = Guid.NewGuid();
-
-            await connection.SubscribeToStreamAsync(
-                GildedDressStockManagerFactory.ShopStream,
-                true,
-                (subscription, resolvedEvent) =>
-                {
-                    var stockListGenerated = JsonConvert.DeserializeObject<StockListGenerated>(Encoding.UTF8.GetString(resolvedEvent.Event.Data));
-                    if (stockListGenerated.CorrelationId == correlationId)
-                    {
-                        receivedList.SetResult(stockListGenerated.StockList);
-                    }
-                }
-            );
-            // this eventually causes a StockListGenerated event with the expected correlation id
-
-            await shop.GenerateStockList(new GenerateStockList(correlationId, tenWeekslater));
-
-            await Task.WhenAny(receivedList.Task, Task.Delay(30000));
-
-            if (receivedList.Task.IsFaulted || !receivedList.Task.IsCompleted)
-            {
-                throw receivedList.Task.Exception ?? new Exception("timed out waiting for a stock list");
-            }
-
-            var stockAfterTenWeeks = await receivedList.Task;
+            var tenWeekslater = dayStockAdded.AddDays(70);
+            var stockAfterTenWeeks = await shop.GenerateStockList(new GenerateStockList(correlationId, tenWeekslater));
 
             var stockItem = stockAfterTenWeeks.Last();
             stockItem.Name.Should().Be("A");
@@ -67,7 +37,7 @@ namespace GildedMallKata.Tests
         }
 
         [Test]
-        public void TheGildedTinCanCannotSellYearOldPlusTins()
+        public async Task TheGildedTinCanCannotSellYearOldPlusTins()
         {
             var oneYearAndOneDayAgo = DateTime.Now.AddYears(-1).AddDays(-1);
             var twoMonthsAgo = DateTime.Now.AddMonths(-2);
@@ -77,10 +47,13 @@ namespace GildedMallKata.Tests
                 new TinnedFood(twoMonthsAgo){Name="new", Price = 10}
             };
 
-            var stockNow = GildedStockManagerFactory
+            var shop = await GildedStockManagerFactory
                             .GildedTinCan()
-                            .WithStock(stock)
-                            .GetStockList(DateTime.Now);
+                            .WithStock(stock);
+
+
+            var correlationId = Guid.NewGuid();
+            var stockNow = await shop.GenerateStockList(new GenerateStockList(correlationId, DateTime.Now));
 
             var stockItem = stockNow.Single();
             stockItem.Name.Should().Be("new");

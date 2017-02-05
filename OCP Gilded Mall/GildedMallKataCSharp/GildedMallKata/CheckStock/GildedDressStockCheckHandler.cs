@@ -11,12 +11,12 @@ using Newtonsoft.Json;
 
 namespace GildedMallKata.CheckStock
 {
-    public class StockCheckHandler : IHandle<GenerateStockList>
+    public class GildedDressStockCheckHandler : IHandle<GenerateStockList>
     {
         private readonly IEventStoreConnection _eventStoreConnection;
         private readonly string _streamName;
 
-        public StockCheckHandler(IEventStoreConnection eventStoreConnection, string streamName)
+        public GildedDressStockCheckHandler(IEventStoreConnection eventStoreConnection, string streamName)
         {
             _eventStoreConnection = eventStoreConnection;
             _streamName = streamName;
@@ -36,7 +36,6 @@ namespace GildedMallKata.CheckStock
                 Console.WriteLine(e);
                 throw;
             }
-
 
             var depreciatedStock = dresses
                 .Where(dsi => dsi != null)

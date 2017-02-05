@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using GildedMallKata;
 using GildedMallKata.AddStock;
 using GildedMallKata.Stock;
 

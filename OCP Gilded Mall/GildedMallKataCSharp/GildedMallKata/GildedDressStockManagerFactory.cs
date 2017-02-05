@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 using EventStore.ClientAPI;
 using GildedMallKata.AddStock;
 using GildedMallKata.CheckStock;
 using GildedMallKata.Reports;
 using GildedMallKata.Stock;
+using Newtonsoft.Json;
 
 namespace GildMallKata
 {
@@ -32,18 +34,46 @@ namespace GildMallKata
             return this;
         }
 
-        public async Task GenerateStockList(GenerateStockList generateStockList)
+        public async Task<IEnumerable<StockItem>> GenerateStockList(GenerateStockList generateStockList)
         {
             await _connectedToEventStore;
-            new StockCheckHandler(_connection, ShopStream).Handle(generateStockList);
+            var receivedList = new TaskCompletionSource<IEnumerable<StockItem>>();
+
+            SubscribeForResult(generateStockList, receivedList);
+
+            await new GildedDressStockCheckHandler(_connection, ShopStream).Handle(generateStockList);
+
+            await CompleteOrTimeout(receivedList);
+
+            return await receivedList.Task;
         }
 
-//        public async Task<IEnumerable<StockItem>> GetStockList(DateTime stockCheckDate)
-//        {
-//            await _connectedToEventStore;
-////            return new StockCheckHandler(_shop).Handle(new CheckStockAsAtDate(stockCheckDate));
-//            return new List<StockItem>().AsEnumerable();
-//        }
+        private static async Task CompleteOrTimeout(TaskCompletionSource<IEnumerable<StockItem>> receivedList)
+        {
+            await Task.WhenAny(receivedList.Task, Task.Delay(30000));
+
+            if (receivedList.Task.IsFaulted || !receivedList.Task.IsCompleted)
+            {
+                throw receivedList.Task.Exception ?? new Exception("timed out waiting for a stock list");
+            }
+        }
+
+        private void SubscribeForResult(GenerateStockList generateStockList, TaskCompletionSource<IEnumerable<StockItem>> receivedList)
+        {
+            _connection.SubscribeToStreamAsync(
+                ShopStream,
+                true,
+                (subscription, resolvedEvent) =>
+                {
+                    var stockListGenerated =
+                        JsonConvert.DeserializeObject<StockListGenerated>(Encoding.UTF8.GetString(resolvedEvent.Event.Data));
+                    if (stockListGenerated.CorrelationId == generateStockList.CorrelationId)
+                    {
+                        receivedList.SetResult(stockListGenerated.StockList);
+                    }
+                }
+            );
+        }
 
         public async Task<FinancialReport> FinancialReportAsAt(DateTime reportDate)
         {

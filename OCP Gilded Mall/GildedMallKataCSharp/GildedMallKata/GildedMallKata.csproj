@@ -52,8 +52,8 @@
     <Compile Include="AddStock\AddStock.cs" />
     <Compile Include="AddStock\AddStockHandler.cs" />
     <Compile Include="CheckStock\CheckStockAsAtDate.cs" />
-    <Compile Include="CheckStock\StockCheckHandler.cs" />
-    <Compile Include="CheckStock\StockExpiryHandler.cs" />
+    <Compile Include="CheckStock\GildedDressStockCheckHandler.cs" />
+    <Compile Include="CheckStock\GildedTinCanStockExpiryHandler.cs" />
     <Compile Include="CheckStock\StockListGenerated.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="Event.cs" />

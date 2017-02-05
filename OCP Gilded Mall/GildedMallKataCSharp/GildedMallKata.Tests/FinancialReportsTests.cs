@@ -67,13 +67,15 @@ namespace GildedMallKata.Tests
                 notExpired
             };
 
-            var financialReport = GildedStockManagerFactory
-                .GildedTinCan()
-                .WithStock(stockItems)
-                .FinancialReportAsAt(DateTime.Now);
+//            var financialReport = GildedStockManagerFactory
+//                .GildedTinCan()
+//                .WithStock(stockItems)
+//                .FinancialReportAsAt(DateTime.Now);
+//
+//            financialReport.ValueOfStock.Should().Be(20M);
+//            financialReport.Depreciation.Should().Be(15M);
 
-            financialReport.ValueOfStock.Should().Be(20M);
-            financialReport.Depreciation.Should().Be(15M);
+            Assert.Fail("boom");
         }
     }
 }

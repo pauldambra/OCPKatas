@@ -17,5 +17,14 @@ namespace GildedMallKata.Stock
         {
             return _lessThanAYearOld(stockCheckDate, DateAdded);
         }
+
+        public static TinnedFood FromStockItem(DateTime dateAdded, StockItem stockItem)
+        {
+            return new TinnedFood(dateAdded)
+            {
+                Name = stockItem.Name,
+                Price = stockItem.Price
+            };
+        }
     }
 }
